@@ -5,13 +5,13 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "postinstall": "prisma generate"
+    "postinstall": "npx prisma generate"
   },
   "dependencies": {
-    "@prisma/client": "^5.x.x",
-    "express": "^4.x.x"
+    "@prisma/client": "^5.22.0",
+    "express": "^4.21.1"
   },
   "devDependencies": {
-    "prisma": "^5.x.x"
+    "prisma": "^5.22.0"
   }
 }
