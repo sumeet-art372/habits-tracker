@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Habits | Dashboard & Career AI</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js for Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .sidebar-gradient {
+            background: linear-gradient(180deg, #0080a4 0%, #0096b4 40%, #055f96 75%, #0a4b78 100%);
+        }
+        .card-shadow {
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen font-sans antialiased flex">
+
+    <!-- LEFT SIDEBAR NAVIGATION -->
+    <aside class="w-64 sidebar-gradient text-white flex flex-col justify-between hidden md:flex sticky top-0 h-screen z-40 shadow-xl">
+        <div>
+            <!-- Logo / Brand -->
+            <div class="h-20 px-6 flex items-center space-x-3 border-b border-white/10">
+                <div class="w-9 h-9 rounded-xl bg-white text-[#0080a4] flex items-center justify-center font-bold text-xl shadow-md">
+                    ⚡
+                </div>
+                <span class="font-bold text-xl tracking-wide text-white">Habits</span>
+            </div>
+
+            <!-- User Brief Badge -->
+            <div class="px-6 py-4 border-b border-white/10 flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-full bg-teal-400 text-teal-950 flex items-center justify-center font-bold text-sm shadow">
+                    RA
+                </div>
+                <div>
+                    <p class="font-bold text-xs leading-tight">Regulatory Hub</p>
+                    <span class="text-[10px] text-teal-100/80">M.Pharm 1st Year Track</span>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="p-4 space-y-1 text-sm font-medium">
+                <button onclick="switchTab('home')" id="nav-home" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition bg-white/20 text-white font-semibold shadow-inner">
+                    <span>🏠</span>
+                    <span>Dashboard</span>
+                </button>
+                <button onclick="switchTab('certifications')" id="nav-certifications" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition text-white/80 hover:bg-white/10 hover:text-white">
+                    <span>🎓</span>
+                    <span>Certifications</span>
+                </button>
+                <button onclick="switchTab('analyser')" id="nav-analyser" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition text-white/80 hover:bg-white/10 hover:text-white">
+                    <span>📊</span>
+                    <span>Progress Analyser</span>
+                </button>
+                <button onclick="switchTab('recommendations')" id="nav-recommendations" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition text-white/80 hover:bg-white/10 hover:text-white">
+                    <span>🤖</span>
+                    <span>AI Recommendations</span>
+                </button>
+                <button onclick="switchTab('calendar')" id="nav-calendar" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition text-white/80 hover:bg-white/10 hover:text-white">
+                    <span>📅</span>
+                    <span>Calendar</span>
+                </button>
+                <button onclick="switchTab('planner')" id="nav-planner" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition text-white/80 hover:bg-white/10 hover:text-white">
+                    <span>🗓️</span>
+                    <span>Weekly Planner</span>
+                </button>
+                <button onclick="switchTab('settings')" id="nav-settings" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition text-white/80 hover:bg-white/10 hover:text-white">
+                    <span>⚙️</span>
+                    <span>Settings</span>
+                </button>
+            </nav>
+        </div>
+
+        <!-- Sidebar Footer Logout Button -->
+        <div class="p-4 border-t border-white/10">
+            <button class="w-full bg-white text-[#0080a4] font-bold py-2.5 px-4 rounded-xl shadow-md hover:bg-slate-100 transition flex items-center justify-center space-x-2 text-sm">
+                <span>↪</span>
+                <span>Logout</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT WRAPPER -->
+    <div class="flex-1 flex flex-col min-h-screen overflow-y-auto">
+
+        <!-- Mobile Header Bar -->
+        <header class="md:hidden sidebar-gradient text-white h-16 px-6 flex items-center justify-between sticky top-0 z-30 shadow-md">
+            <span class="font-bold text-lg">Habits</span>
+            <div class="flex space-x-2">
+                <button onclick="switchTab('home')" class="text-xs px-3 py-1.5 rounded-lg bg-white/25">Home</button>
+                <button onclick="switchTab('recommendations')" class="text-xs px-3 py-1.5 rounded-lg bg-white/25">AI Recs</button>
+            </div>
+        </header>
+
+        <!-- TAB 1: HOME (DASHBOARD) -->
+        <main id="tab-home" class="p-6 md:p-8 max-w-6xl w-full mx-auto space-y-6">
+
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h1 class="text-2xl font-bold text-slate-800">Welcome Back, Ameet</h1>
+                    <p class="text-xs text-slate-500">M.Pharm 1st Year Regulatory & Habit Execution Dashboard</p>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <span class="text-xs font-semibold bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg">Target: Merck GRA</span>
+                    <button onclick="openAddHabitModal()" class="bg-[#009688] hover:bg-teal-700 text-white font-semibold text-xs px-4 py-2.5 rounded-xl transition shadow-md">
+                        + New Habit
+                    </button>
+                </div>
+            </div>
+
+            <!-- Colorful Stat Cards Palette -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <div class="bg-[#f69c37] text-white p-6 rounded-2xl shadow-md flex items-center justify-between">
+                    <div>
+                        <span class="text-xs opacity-90 font-medium">Active Routines</span>
+                        <h3 class="text-3xl font-extrabold mt-1" id="stat-habits-count">--</h3>
+                    </div>
+                    <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center text-xl font-bold">⚡</div>
+                </div>
+                <div class="bg-[#2c348e] text-white p-6 rounded-2xl shadow-md flex items-center justify-between">
+                    <div>
+                        <span class="text-xs opacity-90 font-medium">Certifications Tracked</span>
+                        <h3 class="text-3xl font-extrabold mt-1" id="stat-certs-count">--</h3>
+                    </div>
+                    <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center text-xl font-bold">🎓</div>
+                </div>
+                <div class="bg-[#1e7bbd] text-white p-6 rounded-2xl shadow-md flex items-center justify-between">
+                    <div>
+                        <span class="text-xs opacity-90 font-medium">Top 1% Goal Reach</span>
+                        <h3 class="text-3xl font-extrabold mt-1">65%</h3>
+                    </div>
+                    <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center text-xl font-bold">🎯</div>
+                </div>
+            </div>
+
+            <!-- AI Motivational Banner -->
+            <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-teal-50 rounded-full blur-2xl pointer-events-none"></div>
+                <span class="text-[11px] uppercase tracking-wider text-[#009688] font-bold mb-1 block">✨ AI Daily Motivation</span>
+                <h2 id="ai-quote" class="text-base md:text-lg font-bold text-slate-800 leading-snug">
+                    "Building your foundation in M.Pharm 1st year sets the trajectory for an elite career in Global Regulatory Affairs."
+                </h2>
+            </div>
+
+            <!-- Matrix Checklist Table Card -->
+            <section class="bg-white rounded-2xl p-6 border border-slate-200 card-shadow">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-base font-bold text-slate-800">Daily Habit Matrix</h3>
+                    <span class="text-xs text-slate-400">Click title for Details & Edit options</span>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-100 text-xs uppercase tracking-wider text-slate-400">
+                                <th class="py-3 px-4 font-semibold w-1/3">Habit Title</th>
+                                <th id="day-header-4" class="py-3 px-2 text-center font-semibold">--</th>
+                                <th id="day-header-3" class="py-3 px-2 text-center font-semibold">--</th>
+                                <th id="day-header-2" class="py-3 px-2 text-center font-semibold">--</th>
+                                <th id="day-header-1" class="py-3 px-2 text-center font-semibold">--</th>
+                                <th id="day-header-0" class="py-3 px-2 text-center font-semibold text-[#0080a4]">Today</th>
+                            </tr>
+                        </thead>
+                        <tbody id="matrix-tbody" class="divide-y divide-slate-100 text-sm">
+                            <tr><td colspan="6" class="text-center py-8 text-slate-400">Loading matrix...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+
+        <!-- TAB 2: CERTIFICATIONS -->
+        <main id="tab-certifications" class="p-6 md:p-8 max-w-6xl w-full mx-auto space-y-6 hidden">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-800">Certifications & Standards</h2>
+                    <p class="text-xs text-slate-500 mt-0.5">Track modules, completion benchmarks, and regulatory certifications</p>
+                </div>
+                <button onclick="openAddCertModal()" class="bg-[#2c348e] hover:bg-indigo-900 text-white font-semibold text-xs px-4 py-2.5 rounded-xl transition shadow-md">
+                    + Add Certification
+                </button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="certs-container"></div>
+        </main>
+
+        <!-- TAB 3: PROGRESS ANALYSER -->
+        <main id="tab-analyser" class="p-6 md:p-8 max-w-6xl w-full mx-auto space-y-6 hidden">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-800">Progress Analyser</h2>
+                    <p class="text-xs text-slate-500 mt-0.5">Select any habit from the dropdown to inspect individual stats alongside overall progress</p>
+                </div>
+                <!-- Habit Dropdown Selector -->
+                <div class="flex items-center space-x-2 bg-white px-4 py-2 rounded-xl border border-slate-200 card-shadow">
+                    <span class="text-xs font-medium text-slate-500">View Metric:</span>
+                    <select id="habit-analyser-selector" onchange="updateAnalyserSelection()" class="bg-transparent text-sm font-bold text-[#0080a4] focus:outline-none cursor-pointer">
+                        <option value="all">Overall Progress (All Habits)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 card-shadow">
+                    <h3 id="chart-title-1" class="text-sm font-bold text-slate-700 mb-4">Monthly Habit Completion History</h3>
+                    <div class="h-64"><canvas id="mainBarChart"></canvas></div>
+                </div>
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 card-shadow">
+                    <h3 id="chart-title-2" class="text-sm font-bold text-slate-700 mb-4">Success vs Missed Ratio</h3>
+                    <div class="h-64 flex justify-center"><canvas id="mainPieChart"></canvas></div>
+                </div>
+            </div>
+        </main>
+
+        <!-- TAB 4: TOP 1% AI RECOMMENDATIONS WITH GOAL-DISTANCE TRACKER -->
+        <main id="tab-recommendations" class="p-6 md:p-8 max-w-6xl w-full mx-auto space-y-6 hidden">
+            <div>
+                <span class="text-xs text-[#009688] font-bold tracking-wider uppercase">Strategic AI Guidance</span>
+                <h2 class="text-2xl font-bold text-slate-800 mt-0.5">M.Pharm 1st Year: Top 1% Blueprint for Merck & GCCs</h2>
+                <p class="text-xs text-slate-500 mt-1">Actionable milestones tailored to give you a massive head start during your first year.</p>
+            </div>
+
+            <!-- RESTORED: Milestone & Goal-Distance Progress Tracker -->
+            <div class="bg-white rounded-2xl p-6 border border-slate-200 card-shadow space-y-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <span class="text-xs text-slate-400 font-semibold uppercase">Target Role Milestone</span>
+                        <h3 class="text-lg font-bold text-slate-800">Global Regulatory Affairs (GRA) Associate - Merck / GCC</h3>
+                    </div>
+                    <span class="text-2xl font-black text-[#1e7bbd]">65%</span>
+                </div>
+                <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
+                    <div class="bg-gradient-to-r from-[#f69c37] via-[#1e7bbd] to-[#009688] h-3 rounded-full" style="width: 65%"></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs pt-2">
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                        <span class="text-slate-500 block mb-1">1st Year Foundation</span>
+                        <span class="font-bold text-[#009688]">✓ Advanced Pharmaceutics & ICH</span>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                        <span class="text-slate-500 block mb-1">Analytics Stack</span>
+                        <span class="font-bold text-[#009688]">✓ Python, SQL & Power BI</span>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                        <span class="text-slate-500 block mb-1">Remaining Goal Distance</span>
+                        <span class="font-bold text-[#2c348e]">35% (Thesis, eCTD & Networking)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top 1% Strategy Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 card-shadow space-y-3">
+                    <div class="w-10 h-10 rounded-xl bg-amber-100 text-[#f69c37] flex items-center justify-center font-bold text-lg">🧬</div>
+                    <h3 class="font-bold text-slate-800">1. Master Core Regulatory Frameworks Early</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Since you are in your 1st year, dive deep into FDA 21 CFR and ICH Q guidelines right away. Being fluent in regulatory standards before your 2nd-year thesis makes you an instant standout to recruiters.
+                    </p>
+                </div>
+
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 card-shadow space-y-3">
+                    <div class="w-10 h-10 rounded-xl bg-teal-100 text-[#009688] flex items-center justify-center font-bold text-lg">💻</div>
+                    <h3 class="font-bold text-slate-800">2. Combine Pharma with Data Analytics</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Leverage Python, SQL, and Excel to analyze formulation data and build automated tracking dashboards. This intersection of pharma science and technical data gives you an unbeatable edge over 99% of candidates.
+                    </p>
+                </div>
+
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 card-shadow space-y-3">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-100 text-[#2c348e] flex items-center justify-center font-bold text-lg">🤝</div>
+                    <h3 class="font-bold text-slate-800">3. Proactive Industry Mentorship</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Maintain active dialogue with professionals like Regulatory Project Managers at Merck. Ask insightful questions about eCTD publishing workflows to understand what industry expects before graduation.
+                    </p>
+                </div>
+
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 card-shadow space-y-3">
+                    <div class="w-10 h-10 rounded-xl bg-blue-100 text-[#1e7bbd] flex items-center justify-center font-bold text-lg">⚡</div>
+                    <h3 class="font-bold text-slate-800">4. High-Performance Daily Routine</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Balance your 9:30 AM–5:00 PM college schedule with evening volleyball/gym for peak mental and physical resilience. Consistency in your daily habits is your ultimate compounding advantage.
+                    </p>
+                </div>
+            </div>
+        </main>
+
+        <!-- TAB 5: INTERACTIVE CALENDAR -->
+        <main id="tab-calendar" class="p-6 md:p-8 max-w-6xl w-full mx-auto space-y-6 hidden">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-800">Interactive Calendar & Schedule</h2>
+                    <p class="text-xs text-slate-500 mt-0.5">October 2026 Monthly View — Click any date to view scheduled routines</p>
+                </div>
+                <div class="bg-white px-4 py-2 rounded-xl border border-slate-200 card-shadow text-xs font-bold text-[#0080a4]">
+                    📅 October 2026
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 bg-white rounded-2xl p-6 border border-slate-200 card-shadow space-y-4">
+                    <div class="grid grid-cols-7 text-center text-xs font-bold text-slate-400 pb-2 border-b border-slate-100">
+                        <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+                    </div>
+                    <div id="calendar-grid" class="grid grid-cols-7 gap-2"></div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 card-shadow space-y-4 flex flex-col justify-between">
+                    <div>
+                        <span class="text-[10px] uppercase font-bold text-[#009688] tracking-wider">Selected Date Log</span>
+                        <h3 id="cal-selected-date" class="text-lg font-bold text-slate-800 mt-1">October 27, 2026</h3>
+                        <div class="mt-4 space-y-3">
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                                <span class="text-xs font-semibold text-slate-700 block mb-1">🎓 Academic & Study Block</span>
+                                <p class="text-xs text-slate-500">M.Pharm 1st Year (09:30 AM - 05:00 PM) + Regulatory Study.</p>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                                <span class="text-xs font-semibold text-slate-700 block mb-1">🏐 Athletic & Fitness Block</span>
+                                <p class="text-xs text-slate-500">Evening Volleyball Match & Core Stability Gym Routine.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-teal-50 border border-teal-100 p-3 rounded-xl text-xs text-teal-900">
+                        ✨ <strong>Status:</strong> Top 1% execution mode active!
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- TAB 6: WEEKLY PLANNER -->
+        <main id="tab-planner" class="p-6 md:p-8 max-w-6xl w-full mx-auto space-y-6 hidden">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-800">Weekly Planner</h2>
+                    <p class="text-xs text-slate-500 mt-0.5">Organize daily routine, college blocks, and study goals (Click ✏️ to edit)</p>
+                </div>
+                <button onclick="openAddPlanModal()" class="bg-[#0080a4] hover:bg-teal-700 text-white font-semibold text-xs px-4 py-2.5 rounded-xl transition shadow-md">
+                    + Add Weekly Task
+                </button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="planner-container"></div>
+        </main>
+
+        <!-- TAB 7: SETTINGS -->
+        <main id="tab-settings" class="p-6 md:p-8 max-w-6xl w-full mx-auto space-y-6 hidden">
+            <h2 class="text-2xl font-bold text-slate-800">Settings</h2>
+            <div class="bg-white rounded-2xl p-6 border border-slate-200 card-shadow space-y-3">
+                <div class="flex justify-between items-center py-2 border-b border-slate-100">
+                    <span class="text-sm font-medium text-slate-700">Theme</span>
+                    <span class="text-xs bg-teal-100 text-[#009688] font-bold px-3 py-1 rounded-full">Vibrant Dashboard Palette</span>
+                </div>
+            </div>
+        </main>
+
+    </div>
+
+    <!-- MODAL: INDIVIDUAL HABIT DETAILS & EDIT -->
+    <div id="habit-detail-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-2xl p-6 relative shadow-2xl space-y-4">
+            <button onclick="closeHabitDetailModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">✕</button>
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-teal-100 text-[#009688] flex items-center justify-center font-bold text-lg">⚡</div>
+                <div>
+                    <span id="modal-habit-category" class="text-xs font-bold text-[#0080a4] uppercase tracking-wide">Category</span>
+                    <h3 id="modal-habit-title" class="text-lg font-bold text-slate-800">Habit Title</h3>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3 pt-2">
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-center">
+                    <span class="text-xs text-slate-400 block mb-1">Current Status</span>
+                    <span id="modal-habit-status" class="text-sm font-bold text-emerald-600">Completed Today</span>
+                </div>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-center">
+                    <span class="text-xs text-slate-400 block mb-1">Winning Streak</span>
+                    <span id="modal-habit-streak" class="text-sm font-bold text-[#f69c37]">0 Days</span>
+                </div>
+            </div>
+            <div class="flex space-x-2 pt-2">
+                <button onclick="openEditHabitModal()" class="flex-1 bg-[#1e7bbd] hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl transition text-sm shadow-md">
+                    ✏️ Edit Habit
+                </button>
+                <button onclick="closeHabitDetailModal()" class="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-2.5 rounded-xl transition text-sm">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: EDIT HABIT FORM -->
+    <div id="edit-habit-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-2xl p-6 relative shadow-2xl">
+            <button onclick="closeEditHabitModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">✕</button>
+            <h3 class="text-lg font-bold text-slate-800 mb-4">Edit Habit Details</h3>
+            <form id="edit-habit-form" class="space-y-4">
+                <input type="hidden" id="edit-habit-id">
+                <div>
+                    <label class="text-xs text-slate-500 mb-1 block font-medium">Habit Title</label>
+                    <input type="text" id="edit-habit-title" required
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-sm text-slate-800 focus:outline-none focus:border-[#0080a4]">
+                </div>
+                <div>
+                    <label class="text-xs text-slate-500 mb-1 block font-medium">Category</label>
+                    <select id="edit-habit-category" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-sm text-slate-800 focus:outline-none focus:border-[#0080a4]">
+                        <option value="Health & Routine">Health & Routine</option>
+                        <option value="Career & Study">Career & Study</option>
+                        <option value="Fitness & Sports">Fitness & Sports</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full bg-[#0080a4] hover:bg-teal-700 text-white font-bold py-2.5 rounded-xl transition text-sm shadow-md">
+                    Save Changes
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: EDIT WEEKLY PLAN FORM -->
+    <div id="edit-plan-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-2xl p-6 relative shadow-2xl">
+            <button onclick="closeEditPlanModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">✕</button>
+            <h3 class="text-lg font-bold text-slate-800 mb-4">Edit Weekly Task</h3>
+            <form id="edit-plan-form" class="space-y-4">
+                <input type="hidden" id="edit-plan-id">
+                <div>
+                    <label class="text-xs text-slate-500 mb-1 block font-medium">Day / Time Slot</label>
+                    <input type="text" id="edit-plan-day" required
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-sm text-slate-800 focus:outline-none focus:border-[#0080a4]">
+                </div>
+                <div>
+                    <label class="text-xs text-slate-500 mb-1 block font-medium">Activity / Task</label>
+                    <input type="text" id="edit-plan-task" required
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-sm text-slate-800 focus:outline-none focus:border-[#0080a4]">
+                </div>
+                <button type="submit" class="w-full bg-[#0080a4] hover:bg-teal-700 text-white font-bold py-2.5 rounded-xl transition text-sm shadow-md">
+                    Save Changes
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: ADD HABIT -->
+    <div id="add-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-2xl p-6 relative shadow-2xl">
+            <button onclick="closeAddHabitModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">✕</button>
+            <h3 class="text-lg font-bold text-slate-800 mb-4">Add New Habit</h3>
+            <form id="new-habit-form" class="space-y-4">
+                <div>
+                    <label class="text-xs text-slate-500 mb-1 block font-medium">Habit Title</label>
+                    <input type="text" id="new-title" placeholder="e.g., Regulatory Affairs Study" required
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-sm text-slate-800 focus:outline-none focus:border-[#0080a4]">
+                </div>
+                <div>
+                    <label class="text-xs text-slate-500 mb-1 block font-medium">Category</label>
+                    <select id="new-category" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-sm text-slate-800 focus:outline-none focus:border-[#0080a4]">
+                        <option value="Health & Routine">Health & Routine</option>
+                        <option value="Career & Study">Career & Study</option>
+                        <option value="Fitness & Sports">Fitness & Sports</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full bg-[#009688] hover:bg-teal-700 text-white font-bold py-2.5 rounded-xl transition text-sm shadow-md">
+                    Create Habit
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: ADD CERTIFICATION -->
+    <div id="cert-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-2xl p-6 relative shadow-2xl">
+            <button onclick="closeAddCertModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">✕</button>
+            <h3 class="text-lg font-bold text-slate-800 mb-4">Add Certification Goal</h3>
+            <form id="new-cert-form" class="space-y-4">
+                <div>
+                    <label class="text-xs text-slate-500 mb-1 block font-medium">Certification Title</label>
+                    <input type="text" id="cert-title" placeholder="e.g., eCTD Standards" required
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-sm text-slate-800 focus:outline-none focus:border-[#2c348e]">
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-xs text-slate-500 mb-1 block font-medium">Provider</label>
+                        <input type="text" id="cert-provider" placeholder="Coursera / Merck" required
+                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-sm text-slate-800 focus:outline-none focus:border-[#2c348e]">
+                    </div>
+                    <div>
+                        <label class="text-xs text-slate-500 mb-1 block font-medium">Progress %</label>
+                        <input type="number" id="cert-progress" min="0" max="100" value="0" required
+                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-sm text-slate-800 focus:outline-none focus:border-[#2c348e]">
+                    </div>
+                </div>
+                <button type="submit" class="w-full bg-[#2c348e] hover:bg-indigo-900 text-white font-bold py-2.5 rounded-xl transition text-sm shadow-md">
+                    Save Certification
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: ADD WEEKLY PLAN -->
+    <div id="plan-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-2xl p-6 relative shadow-2xl">
+            <button onclick="closeAddPlanModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">✕</button>
+            <h3 class="text-lg font-bold text-slate-800 mb-4">Add Weekly Task</h3>
+            <form id="new-plan-form" class="space-y-4">
+                <div>
+                    <label class="text-xs text-slate-500 mb-1 block font-medium">Day / Time Slot</label>
+                    <input type="text" id="plan-day" placeholder="e.g., Monday (09:00 AM)" required
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-sm text-slate-800 focus:outline-none focus:border-[#0080a4]">
+                </div>
+                <div>
+                    <label class="text-xs text-slate-500 mb-1 block font-medium">Activity / Task</label>
+                    <input type="text" id="plan-task" placeholder="e.g., College & Regulatory Study" required
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-sm text-slate-800 focus:outline-none focus:border-[#0080a4]">
+                </div>
+                <button type="submit" class="w-full bg-[#0080a4] hover:bg-teal-700 text-white font-bold py-2.5 rounded-xl transition text-sm shadow-md">
+                    Add Task
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        const userId = 1;
+        let habitsData = [];
+        let certsData = [];
+        let plannerData = [
+            { id: 1, day: "Monday - Friday (09:30 AM - 05:00 PM)", task: "College M.Pharm 1st Year Classes" },
+            { id: 2, day: "Every Evening", task: "Volleyball Practice & Gym Workout" },
+            { id: 3, day: "Daily Evening", task: "ICH Guidelines & eCTD Study (30-60 mins)" }
+        ];
+
+        let barChartInstance = null;
+        let pieChartInstance = null;
+        let currentEditingHabitId = null;
+        let currentEditingPlanId = null;
+
+        const motivationalQuotes = [
+            "\"Excellence is not an act, but a disciplined daily habit. Master your routine today to conquer your pinnacle tomorrow.\"",
+            "\"Consistency compounds quietly until success arrives suddenly. Stay relentless in your pursuit of regulatory and professional mastery.\"",
+            "\"Every small habit checked off is a vote for the person you wish to become. Build your future with unwavering dedication.\""
+        ];
+
+        function setRandomQuote() {
+            const randomIndex = Math.floor(Math.random() * motivationalQuotes.length);
+            const quoteEl = document.getElementById('ai-quote');
+            if (quoteEl) quoteEl.innerText = motivationalQuotes[randomIndex];
+        }
+
+        function switchTab(tabId) {
+            const tabs = ['home', 'certifications', 'analyser', 'recommendations', 'calendar', 'planner', 'settings'];
+            tabs.forEach(t => {
+                const el = document.getElementById(`tab-${t}`);
+                const nav = document.getElementById(`nav-${t}`);
+                if (el) el.classList.add('hidden');
+                if (nav) {
+                    nav.classList.remove('bg-white/20', 'text-white', 'font-semibold', 'shadow-inner');
+                    nav.classList.add('text-white/80', 'hover:bg-white/10', 'hover:text-white');
+                }
+            });
+
+            const activeEl = document.getElementById(`tab-${tabId}`);
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            if (activeEl) activeEl.classList.remove('hidden');
+            if (activeNav) {
+                activeNav.classList.remove('text-white/80', 'hover:bg-white/10', 'hover:text-white');
+                activeNav.classList.add('bg-white/20', 'text-white', 'font-semibold', 'shadow-inner');
+            }
+
+            if (tabId === 'analyser') renderAnalyserCharts('all');
+            if (tabId === 'calendar') renderInteractiveCalendar();
+        }
+
+        function setupMatrixHeaders() {
+            const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+            const today = new Date();
+            for (let i = 0; i < 5; i++) {
+                const d = new Date(today);
+                d.setDate(today.getDate() - i);
+                const dayName = days[d.getDay()];
+                const dateNum = d.getDate();
+                const el = document.getElementById(`day-header-${i}`);
+                if (el) {
+                    el.innerHTML = `<span class="block">${dayName}</span><span class="text-[10px] text-slate-400 font-normal">${dateNum}</span>`;
+                }
+            }
+        }
+
+        async function fetchData() {
+            try {
+                await fetch('/api/users', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: 'ameet@example.com', name: 'Ameet', password: 'pass' })
+                });
+
+                const resHabits = await fetch(`/api/habits/${userId}`);
+                habitsData = await resHabits.json();
+                document.getElementById('stat-habits-count').innerText = habitsData.length;
+                renderMatrix();
+                populateHabitDropdown();
+
+                const resCerts = await fetch(`/api/certifications/${userId}`);
+                certsData = await resCerts.json();
+                document.getElementById('stat-certs-count').innerText = certsData.length;
+                renderCertifications();
+                renderPlanner();
+            } catch (err) {
+                console.error("Error fetching data:", err);
+            }
+        }
+
+        function populateHabitDropdown() {
+            const selector = document.getElementById('habit-analyser-selector');
+            if (!selector) return;
+            let options = `<option value="all">Overall Progress (All Habits)</option>`;
+            habitsData.forEach(h => {
+                options += `<option value="${h.id}">${h.title}</option>`;
+            });
+            selector.innerHTML = options;
+        }
+
+        function renderMatrix() {
+            const tbody = document.getElementById('matrix-tbody');
+            if (habitsData.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-slate-400">No habits tracked yet. Click "+ New Habit" to begin!</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = habitsData.map(h => `
+                <tr class="hover:bg-slate-50 transition">
+                    <td class="py-3.5 px-4 font-semibold text-slate-700 flex items-center space-x-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#009688]"></span>
+                        <span onclick="openHabitDetail(${h.id})" class="cursor-pointer hover:text-[#0080a4] hover:underline" title="Click for details & edit options">${h.title}</span>
+                    </td>
+                    <td class="text-center py-3.5 text-slate-300">✓</td>
+                    <td class="text-center py-3.5 text-slate-300">✓</td>
+                    <td class="text-center py-3.5 text-slate-300">✓</td>
+                    <td class="text-center py-3.5 text-slate-300">✓</td>
+                    <td class="text-center py-3.5">
+                        <input type="checkbox" ${h.completed ? 'checked' : ''} onchange="toggleHabit(${h.id}, ${h.completed}, ${h.streak})"
+                            class="w-5 h-5 rounded border-slate-300 text-[#0080a4] focus:ring-[#0080a4] bg-slate-100 cursor-pointer accent-[#0080a4]">
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function openHabitDetail(id) {
+            const habit = habitsData.find(h => h.id === id);
+            if (!habit) return;
+
+            currentEditingHabitId = habit.id;
+            document.getElementById('modal-habit-title').innerText = habit.title;
+            document.getElementById('modal-habit-category').innerText = habit.category || 'General Routine';
+            document.getElementById('modal-habit-status').innerText = habit.completed ? 'Completed Today ✓' : 'Pending Today ⏳';
+            document.getElementById('modal-habit-streak').innerText = `${habit.streak || 0} Days`;
+
+            document.getElementById('habit-detail-modal').classList.remove('hidden');
+        }
+
+        function closeHabitDetailModal() {
+            document.getElementById('habit-detail-modal').classList.add('hidden');
+        }
+
+        function openEditHabitModal() {
+            closeHabitDetailModal();
+            const habit = habitsData.find(h => h.id === currentEditingHabitId);
+            if (!habit) return;
+
+            document.getElementById('edit-habit-id').value = habit.id;
+            document.getElementById('edit-habit-title').value = habit.title;
+            document.getElementById('edit-habit-category').value = habit.category || 'Health & Routine';
+
+            document.getElementById('edit-habit-modal').classList.remove('hidden');
+        }
+
+        function closeEditHabitModal() {
+            document.getElementById('edit-habit-modal').classList.add('hidden');
+        }
+
+        document.getElementById('edit-habit-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('edit-habit-id').value;
+            const title = document.getElementById('edit-habit-title').value;
+            const category = document.getElementById('edit-habit-category').value;
+
+            await fetch(`/api/habits/${id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title, category })
+            });
+
+            closeEditHabitModal();
+            fetchData();
+        });
+
+        function updateAnalyserSelection() {
+            const selectedVal = document.getElementById('habit-analyser-selector').value;
+            renderAnalyserCharts(selectedVal);
+        }
+
+        function renderAnalyserCharts(filterId) {
+            if (barChartInstance) barChartInstance.destroy();
+            if (pieChartInstance) pieChartInstance.destroy();
+
+            let barData = [12, 19, 15, 22, 28];
+            let pieData = [82, 18];
+            let barLabel = 'Overall Completions';
+
+            if (filterId !== 'all') {
+                const habit = habitsData.find(h => h.id == filterId);
+                if (habit) {
+                    barLabel = `${habit.title} History`;
+                    const base = habit.streak > 0 ? habit.streak * 3 : 5;
+                    barData = [base + 2, base + 5, base + 3, base + 8, base + (habit.completed ? 10 : 4)];
+                    pieData = [habit.completed ? 90 : 60, habit.completed ? 10 : 40];
+                    document.getElementById('chart-title-1').innerText = `Monthly Performance: ${habit.title}`;
+                    document.getElementById('chart-title-2').innerText = `Success Ratio: ${habit.title}`;
+                }
+            } else {
+                document.getElementById('chart-title-1').innerText = `Monthly Habit Completion History`;
+                document.getElementById('chart-title-2').innerText = `Success vs Missed Ratio`;
+            }
+
+            const ctxBar = document.getElementById('mainBarChart').getContext('2d');
+            barChartInstance = new Chart(ctxBar, {
+                type: 'bar',
+                data: {
+                    labels: ['Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
+                    datasets: [{
+                        label: barLabel,
+                        data: barData,
+                        backgroundColor: '#0080a4',
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { display: false } },
+                        y: { grid: { color: '#f1f5f9' } }
+                    }
+                }
+            });
+
+            const ctxPie = document.getElementById('mainPieChart').getContext('2d');
+            pieChartInstance = new Chart(ctxPie, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Completed', 'Missed'],
+                    datasets: [{
+                        data: pieData,
+                        backgroundColor: ['#009688', '#e2e8f0'],
+                        borderWidth: 0
+                    }]
+                }
+            });
+        }
+
+        function renderInteractiveCalendar() {
+            const grid = document.getElementById('calendar-grid');
+            if (!grid) return;
+
+            let html = '';
+            for (let i = 1; i <= 31; i++) {
+                const isToday = i === 27;
+                const hasActivity = i % 2 === 0 || isToday;
+                html += `
+                    <div onclick="selectCalendarDate(${i})" class="h-14 rounded-xl border ${isToday ? 'border-[#0080a4] bg-teal-50 font-bold text-[#0080a4]' : 'border-slate-100 bg-slate-50/50 hover:bg-slate-100'} p-2 flex flex-col justify-between cursor-pointer transition">
+                        <span class="text-xs ${isToday ? 'text-[#0080a4]' : 'text-slate-600'}">${i}</span>
+                        ${hasActivity ? '<span class="w-1.5 h-1.5 rounded-full bg-[#009688] self-end"></span>' : ''}
+                    </div>
+                `;
+            }
+            grid.innerHTML = html;
+        }
+
+        function selectCalendarDate(day) {
+            document.getElementById('cal-selected-date').innerText = `October ${day}, 2026`;
+        }
+
+        function renderCertifications() {
+            const container = document.getElementById('certs-container');
+            if (!container) return;
+            if (certsData.length === 0) {
+                container.innerHTML = `<p class="text-slate-400 text-sm col-span-2">No certifications added yet.</p>`;
+                return;
+            }
+            container.innerHTML = certsData.map(c => `
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 card-shadow relative">
+                    <button onclick="deleteCert(${c.id})" class="absolute top-4 right-4 text-slate-400 hover:text-rose-500 text-xs">✕</button>
+                    <h3 class="text-base font-bold text-slate-800 mb-1">${c.title}</h3>
+                    <p class="text-xs text-slate-500 mb-4">${c.provider} • <span class="text-[#2c348e] font-semibold">${c.progress}% completed</span></p>
+                    <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                        <div class="bg-gradient-to-r from-[#2c348e] to-[#009688] h-2.5 rounded-full" style="width: ${c.progress}%"></div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderPlanner() {
+            const container = document.getElementById('planner-container');
+            if (!container) return;
+            container.innerHTML = plannerData.map(p => `
+                <div class="bg-white rounded-2xl p-5 flex items-center justify-between border border-slate-200 card-shadow">
+                    <div>
+                        <span class="text-xs text-[#0080a4] font-bold block mb-1">${p.day}</span>
+                        <h4 class="text-sm font-semibold text-slate-800">${p.task}</h4>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="openEditPlanModal(${p.id})" class="text-slate-400 hover:text-[#0080a4] text-xs" title="Edit Task">✏️</button>
+                        <button onclick="deletePlan(${p.id})" class="text-slate-300 hover:text-rose-500 text-xs" title="Delete Task">✕</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openEditPlanModal(id) {
+            const plan = plannerData.find(p => p.id === id);
+            if (!plan) return;
+            currentEditingPlanId = id;
+            document.getElementById('edit-plan-id').value = plan.id;
+            document.getElementById('edit-plan-day').value = plan.day;
+            document.getElementById('edit-plan-task').value = plan.task;
+            document.getElementById('edit-plan-modal').classList.remove('hidden');
+        }
+
+        function closeEditPlanModal() {
+            document.getElementById('edit-plan-modal').classList.add('hidden');
+        }
+
+        document.getElementById('edit-plan-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const id = parseInt(document.getElementById('edit-plan-id').value);
+            const day = document.getElementById('edit-plan-day').value;
+            const task = document.getElementById('edit-plan-task').value;
+
+            const plan = plannerData.find(p => p.id === id);
+            if (plan) {
+                plan.day = day;
+                plan.task = task;
+            }
+            closeEditPlanModal();
+            renderPlanner();
+        });
+
+        async function toggleHabit(id, status, streak) {
+            const newCompleted = !status;
+            const newStreak = newCompleted ? streak + 1 : Math.max(0, streak - 1);
+            await fetch(`/api/habits/${id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ completed: newCompleted, streak: newStreak })
+            });
+            fetchData();
+        }
+
+        async function deleteCert(id) {
+            await fetch(`/api/certifications/${id}`, { method: 'DELETE' });
+            fetchData();
+        }
+
+        function deletePlan(id) {
+            plannerData = plannerData.filter(p => p.id !== id);
+            renderPlanner();
+        }
+
+        // Modals
+        function openAddHabitModal() { document.getElementById('add-modal').classList.remove('hidden'); }
+        function closeAddHabitModal() { document.getElementById('add-modal').classList.add('hidden'); }
+
+        function openAddCertModal() { document.getElementById('cert-modal').classList.remove('hidden'); }
+        function closeAddCertModal() { document.getElementById('cert-modal').classList.add('hidden'); }
+
+        function openAddPlanModal() { document.getElementById('plan-modal').classList.remove('hidden'); }
+        function closeAddPlanModal() { document.getElementById('plan-modal').classList.add('hidden'); }
+
+        document.getElementById('new-habit-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const title = document.getElementById('new-title').value;
+            const category = document.getElementById('new-category').value;
+
+            await fetch('/api/habits', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title, category, icon: '⚡', userId })
+            });
+
+            document.getElementById('new-title').value = '';
+            closeAddHabitModal();
+            fetchData();
+        });
+
+        document.getElementById('new-cert-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const title = document.getElementById('cert-title').value;
+            const provider = document.getElementById('cert-provider').value;
+            const progress = parseInt(document.getElementById('cert-progress').value);
+
+            await fetch('/api/certifications', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title, provider, progress, modules: '5 Modules', target: 'Q4 2026', userId })
+            });
+
+            document.getElementById('cert-title').value = '';
+            closeAddCertModal();
+            fetchData();
+        });
+
+        document.getElementById('new-plan-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const day = document.getElementById('plan-day').value;
+            const task = document.getElementById('plan-task').value;
+
+            plannerData.push({ id: Date.now(), day, task });
+            document.getElementById('plan-day').value = '';
+            document.getElementById('plan-task').value = '';
+            closeAddPlanModal();
+            renderPlanner();
+        });
+
+        // Initialize
+        setRandomQuote();
+        setupMatrixHeaders();
+        fetchData();
+    </script>
+</body>
+</html>
